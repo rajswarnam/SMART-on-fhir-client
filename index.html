@@ -10,7 +10,6 @@
         // get the URL parameters received from the authorization server
         var state = getUrlParameter("state");  // session key
         var code = getUrlParameter("code");    // authorization code
-
         // load the app parameters stored in the session
         var params = JSON.parse(localStorage[state]);  // load app session
         var tokenUri = params.tokenUri;
@@ -18,7 +17,6 @@
         var secret = params.secret;
         var serviceUri = params.serviceUri;
         var redirectUri = params.redirectUri;
-
         // Prep the token exchange call parameters
         var data = {
             grant_type: 'authorization_code',
@@ -37,13 +35,11 @@
         if (secret) {
             options['headers'] = {'Authorization': 'Basic ' + btoa(clientId + ':' + secret)};
         }
-
         // obtain authorization token from the authorization service using the authorization code
         $.ajax(options).done(function(res){
             // should POST back the access token and the patient ID
             var accessToken = res.access_token;
             var patientId = res.patient;
-
             document.write("Aceess token recieved...")
             // and now we can use these to construct standard FHIR
             // REST calls to obtain patient resources with the
@@ -68,7 +64,6 @@
                 
             });
         });
-
         // Convenience function for parsing of URL parameters
         // based on http://www.jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
         function getUrlParameter(sParam)
