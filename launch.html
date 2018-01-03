@@ -8,12 +8,12 @@
         Loading...
         <script>
         // Change this to the ID of the client that you registered with the SMART on FHIR authorization server.
-        var clientId = "test4";
+        var clientId = "onvospft4lj1ll4o7edh4squdl";
         // For demonstration purposes, if you registered a confidential client
         // you can enter its secret here. The demo app will pretend it's a confidential
         // app (in reality it cannot be confidential, since it cannot keep secrets in the
         // browser)
-        var secret = "m76him9cd76atfskfulgqf3m59";    // set me, if confidential
+        var secret = "4611feg409eu877hg050irhbkc";    // set me, if confidential
         // These parameters will be received at launch time in the URL
         var serviceUri = getUrlParameter("iss");
         var launchContextId = getUrlParameter("launch");
@@ -31,14 +31,25 @@
         // current URL and replace "launch.html" with "index.html".
         var launchUri = window.location.protocol + "//" + window.location.host + window.location.pathname;
         var redirectUri = launchUri.replace("launch.html","index.html");
+        console.info('redirectUri'+redirectUri);
+        console.info('serviceUri'+serviceUri);
+        //redirectUri="http://localhost:8081/openmrs-standalone/smart/index.html";
+       
         // FHIR Service Conformance Statement URL
-        var conformanceUri = serviceUri + "/metadata"
+        //var conformanceUri = serviceUri + "/metadata"
         // Let's request the conformance statement from the SMART on FHIR API server and
         // find out the endpoint URLs for the authorization server
+        var conformanceUri = "http://localhost:8081/openmrs-standalone/ws/oauth/metadata";
         $.get(conformanceUri, function(r){
-            var authUri = r.authUri,
-                tokenUri = r.tokenUri,
-                fhirUri = r.fhirUri ;
+             var authUri = r.authUri,
+                 tokenUri = r.tokenUri,
+                 fhirUri = r.fhirUri ;
+                 console.info("authoURI"+authUri+"::tokenUri===>"+tokenUri+"::fhirUri"+fhirUri);
+            //  authUri="http://localhost:8081/openmrs-standalone/ws/oauth/authorize";
+            //  tokenUri="http://localhost:8081/openmrs-standalone/ws/oauth/token";
+            // fhirUri="http://localhost:8081/openmrs-standalone/openmrs/ws/fhir";
+
+
             /*
             var smartExtension = r.rest[0].security.extension.filter(function (e) {
                return (e.url === "http://fhir-registry.smarthealthit.org/StructureDefinition/oauth-uris");

@@ -16,8 +16,13 @@
         var clientId = params.clientId;
         var secret = params.secret;
         var serviceUri = params.serviceUri;
+
         var redirectUri = params.redirectUri;
+        console.info("service URL"+ serviceUri);
+        console.info("tokenUri" +tokenUri);
+        
         // Prep the token exchange call parameters
+        URLhttp://localhost:8081/openmrs-standalone/openmrs/ws/fhirtokenUrihttp://localhost:8081/openmrs-standalone/ws/oauth/tokenclientIdonvospft4lj1ll4o7edh4squdl
         var data = {
             grant_type: 'authorization_code',
             code: code,
@@ -40,13 +45,15 @@
             // should POST back the access token and the patient ID
             var accessToken = res.access_token;
             var patientId = res.patient;
-            document.write("Aceess token recieved...")
+            console.info("patientId"+patientId);
+            document.write("Aceess token recieved...");
             // and now we can use these to construct standard FHIR
             // REST calls to obtain patient resources with the
             // SMART on FHIR-specific authorization header...
             // Let's, for example, grab the patient resource and
             // print the name and id's of active patients on the screen
-            var url = serviceUri + "/Patient?active=true";
+            var url = serviceUri+"/Patient/b8da40dd-c99f-4c55-bfc3-3bbe5c2d4bd3";
+            console.info('Before making FHIR call');
             $.ajax({
                 url: url,
                 type: "GET",
@@ -55,12 +62,16 @@
                     "Authorization": "Bearer " + accessToken
                 },
             }).done(function(data){
-                for(var i=0; i < data.entry.length; i++){
-                    var name = JSON.stringify(data.entry[i].resource.name[0].prefix[0] +" "+ data.entry[i].resource.name[0].given[0] +" "+ data.entry[i].resource.name[0].family[0]);
-                    document.body.innerHTML += "<h2>Patient: " + name + "</h3>";
-                    var id = JSON.stringify(data.entry[i].resource.id);
-                    document.body.innerHTML += "ID: " + id + "</h3>";
-                }
+                console.info('data'+JSON.stringify(data));
+                var name = data.name[0].given[0] +" "+ data.name[0].family;
+                document.body.innerHTML += "<h2>Patient: " + name + "</h3>";
+                    document.body.innerHTML += "ID: " + data.id + "</h3>";
+                // for(var i=0; i < data.entry.length; i++){
+                //     var name = JSON.stringify(data.entry[i].resource.name[0].prefix[0] +" "+ data.entry[i].resource.name[0].given[0] +" "+ data.entry[i].resource.name[0].family[0]);
+                //     document.body.innerHTML += "<h2>Patient: " + name + "</h3>";
+                //     var id = JSON.stringify(data.entry[i].resource.id);
+                //     document.body.innerHTML += "ID: " + id + "</h3>";
+                // }
                 
             });
         });
